@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>E-Commerce Platform - Client Requirements Document</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    color: #333;
+}
+h1 { color: #2c3e50; border-bottom: 3px solid #2c3e50; padding-bottom: 10px; }
+h2 { color: #34495e; border-bottom: 2px solid #bdc3c7; padding-bottom: 8px; margin-top: 30px; }
+h3 { color: #16a085; margin-top: 25px; }
+h4 { color: #27ae60; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+th { background-color: #2c3e50; color: white; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; overflow-x: auto; border-radius: 8px; }
+.highlight { background: #e8f4f8; padding: 15px; border-left: 4px solid #3498db; margin: 20px 0; }
+.status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.status-high { background: #e74c3c; color: white; }
+.status-medium { background: #f39c12; color: white; }
+.status-low { background: #27ae60; color: white; }
+.footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>🏬 E-Commerce Platform</h1>
+<p style="font-size: 18px;"><strong>Client Requirements Document (For Developers)</strong></p>
+
+<hr>
+
+<h2>📄 Document Information</h2>
+<table>
+    <tr><td width="200"><strong>Project Name</strong></td><td>E-Commerce Web Application</td></tr>
+    <tr><td><strong>Client Name</strong></td><td>[Your Name / Business Name]</td></tr>
+    <tr><td><strong>Tech Stack</strong></td><td>Python (FastAPI) + Next.js + PostgreSQL</td></tr>
+    <tr><td><strong>Budget</strong></td><td>$0 (Free tiers & open source only)</td></tr>
+    <tr><td><strong>Document Version</strong></td><td>1.0</td></tr>
+    <tr><td><strong>Date</strong></td><td>[Current Date]</td></tr>
+</table>
+
+<hr>
+
+<h2>1. 📌 Executive Summary</h2>
+<h3>1.1 Project Objective</h3>
+<p>Build a fully functional e-commerce website where customers can browse products, add items to cart, make purchases, and manage orders. Administrators can manage products, users, and track orders.</p>
+
+<h3>1.2 Target Audience</h3>
+<ul>
+    <li><strong>Customers:</strong> General public looking to purchase products online</li>
+    <li><strong>Administrators:</strong> Store owners managing the platform</li>
+</ul>
+
+<h3>1.3 Success Criteria</h3>
+<ul>
+    <li>✅ Customers can complete purchase in under 3 minutes</li>
+    <li>✅ Admin can add new product in under 2 minutes</li>
+    <li>✅ Site loads within 3 seconds on mobile devices</li>
+    <li>✅ System handles up to 500 concurrent users</li>
+</ul>
+
+<hr>
+
+<h2>2. 👤 Functional Requirements by User Role</h2>
+
+<h3>2.1 Guest User (Not Logged In)</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+    <tr><td>G1</td><td>View all products on homepage</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G2</td><td>View individual product details (image, price, description, stock status)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G3</td><td>Search products by name</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>G4</td><td>Filter products by category</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>G5</td><td>Sort products by price (low to high, high to low)</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>G6</td><td>Add products to shopping cart</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G7</td><td>View cart with item quantities and subtotal</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G8</td><td>Update quantity or remove items from cart</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G9</td><td>Register for new account</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>G10</td><td>Log into existing account</td><td><span class="status-high">HIGH</span></td></tr>
+</table>
+
+<h3>2.2 Registered Customer</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+    <tr><td>C1</td><td>All Guest User capabilities</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C2</td><td>Log in / Log out</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C3</td><td>View personal profile information</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C4</td><td>Edit profile (name, email, phone, address)</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>C5</td><td>Change password</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>C6</td><td>Proceed to checkout with saved information</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C7</td><td>Enter shipping address (or select saved address)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C8</td><td>Enter billing address (option to use same as shipping)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C9</td><td>Select shipping method (Standard: 3-5 days / Express: 1-2 days)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C10</td><td>View order summary before placing order</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C11</td><td>Place order and receive confirmation</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C12</td><td>View order history (all past orders)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C13</td><td>View individual order details (items, total, status)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C14</td><td>Track order status (pending → confirmed → shipped → delivered)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>C15</td><td>Cancel order if status is "pending" or "confirmed"</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>C16</td><td>Request return within 7 days of delivery</td><td><span class="status-low">LOW</span></td></tr>
+</table>
+
+<h3>2.3 Administrator</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+    <tr><td>A1</td><td>Secure admin login (separate from customer login)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A2</td><td>View dashboard with key metrics (total sales, orders, products, users)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A3</td><td>View all customers list with search</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>A4</td><td>Disable or enable customer accounts</td><td><span class="status-low">LOW</span></td></tr>
+    <tr><td>A5</td><td>Add new product (name, price, description, stock, category, images)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A6</td><td>Edit existing product details</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A7</td><td>Delete product (soft delete - hide from store)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A8</td><td>View all orders with status filters</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A9</td><td>Update order status (pending, confirmed, shipped, delivered, cancelled)</td><td><span class="status-high">HIGH</span></td></tr>
+    <tr><td>A10</td><td>Add tracking number when shipping order</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>A11</td><td>View low stock products (quantity ≤ 5)</td><td><span class="status-medium">MEDIUM</span></td></tr>
+    <tr><td>A12</td><td>Update inventory quantities</td><td><span class="status-high">HIGH</span></td></tr>
+</table>
+
+<hr>
+
+<h2>3. 📄 Page-by-Page Requirements</h2>
+
+<h3>3.1 Home Page (<code>/</code>)</h3>
+<table>
+    <tr><th>Section</th><th>Content Requirement</th></tr>
+    <tr><td>Header</td><td>Logo, search bar, cart icon (with item count), login/register or user name</td></tr>
+    <tr><td>Hero Banner</td><td>Large promotional image with headline and call-to-action button</td></tr>
+    <tr><td>Featured Products</td><td>Grid display of 4-6 featured products with image, name, price, "View Details" button</td></tr>
+    <tr><td>Categories Section</td><td>Display of 4-6 main categories as clickable cards</td></tr>
+    <tr><td>Footer</td><td>Contact info, social media links, copyright notice</td></tr>
+</table>
+
+<h3>3.2 Products Listing Page (<code>/products</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Page Title</td><td>"All Products" or Category Name</td></tr>
+    <tr><td>Sidebar Filters</td><td>Category filter (checkbox), Price range slider</td></tr>
+    <tr><td>Sort Dropdown</td><td>Options: Default, Price Low-High, Price High-Low, Newest First</td></tr>
+    <tr><td>Product Grid</td><td>Display 12 products per page, each showing image, name, price, stock status</td></tr>
+    <tr><td>Pagination</td><td>Previous/Next buttons and page numbers</td></tr>
+    <tr><td>"Out of Stock" Badge</td><td>Show clearly on product card when quantity = 0</td></tr>
+</table>
+
+<h3>3.3 Product Detail Page (<code>/products/[slug]</code>)</h3>
+<table>
+    <tr><th>Section</th><th>Requirement</th></tr>
+    <tr><td>Product Images</td><td>Main image with thumbnail carousel, click to zoom</td></tr>
+    <tr><td>Product Name</td><td>Bold headline</td></tr>
+    <tr><td>Price</td><td>Current price, show original price with strikethrough if on sale</td></tr>
+    <tr><td>Rating</td><td>Star rating display (if reviews implemented)</td></tr>
+    <tr><td>Stock Status</td><td>"In Stock" (green) or "Out of Stock" (red)</td></tr>
+    <tr><td>Quantity Selector</td><td>Dropdown or number input (1 to available stock)</td></tr>
+    <tr><td>Add to Cart Button</td><td>Add product with selected quantity</td></tr>
+    <tr><td>Description Tab</td><td>Full product description</td></tr>
+    <tr><td>Specifications Table</td><td>Product attributes (weight, dimensions, material, etc.)</td></tr>
+</table>
+
+<h3>3.4 Shopping Cart Page (<code>/cart</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Cart Items Table</td><td>Product image, name, price, quantity selector, subtotal, remove button</td></tr>
+    <tr><td>Quantity Update</td><td>Increase/decrease buttons, auto-update total</td></tr>
+    <tr><td>Remove Item</td><td>Trash icon to remove item from cart</td></tr>
+    <tr><td>Cart Summary</td><td>Subtotal, shipping estimate (if applicable), total</td></tr>
+    <tr><td>Coupon Code</td><td>Input field and "Apply" button</td></tr>
+    <tr><td>Continue Shopping Button</td><td>Link back to products page</td></tr>
+    <tr><td>Checkout Button</td><td>Proceed to checkout (disabled if cart empty)</td></tr>
+    <tr><td>Empty Cart Message</td><td>Show message and link to products when cart is empty</td></tr>
+</table>
+
+<h3>3.5 Checkout Page (<code>/checkout</code>)</h3>
+<table>
+    <tr><th>Step</th><th>Requirement</th></tr>
+    <tr><td>Login Required</td><td>Redirect to login if user not logged in</td></tr>
+    <tr><td>Step 1: Shipping Address</td><td>Form: Full name, address line 1, address line 2, city, state, pincode, phone</td></tr>
+    <tr><td>Step 2: Shipping Method</td><td>Radio buttons: Standard (Free), Express ($10)</td></tr>
+    <tr><td>Step 3: Payment Method</td><td>Options: Credit/Debit Card, Cash on Delivery, UPI (if payment gateway integrated)</td></tr>
+    <tr><td>Order Summary Sidebar</td><td>Items list, subtotal, shipping, total</td></tr>
+    <tr><td>Place Order Button</td><td>Submit order, show loading state</td></tr>
+    <tr><td>Back to Cart Link</td><td>Allow user to go back and edit cart</td></tr>
+</table>
+
+<h3>3.6 Order Confirmation Page (<code>/order-confirmation/[id]</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Success Message</td><td>"Thank you! Your order has been placed"</td></tr>
+    <tr><td>Order Number</td><td>Display prominently with copy button</td></tr>
+    <tr><td>Order Details</td><td>Items purchased, quantities, prices</td></tr>
+    <tr><td>Shipping Address</td><td>Complete address shown</td></tr>
+    <tr><td>Total Amount</td><td>Subtotal, shipping, grand total</td></tr>
+    <tr><td>Continue Shopping Button</td><td>Link to products page</td></tr>
+    <tr><td>View Orders Link</td><td>Link to order history page</td></tr>
+</table>
+
+<h3>3.7 My Orders Page (<code>/account/orders</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Orders Table</td><td>Order ID, date, total, status, actions (View Details)</td></tr>
+    <tr><td>Filter</td><td>Filter by status (All, Pending, Shipped, Delivered)</td></tr>
+    <tr><td>Empty State</td><td>"No orders found" message with link to shop</td></tr>
+    <tr><td>Pagination</td><td>If more than 10 orders</td></tr>
+</table>
+
+<h3>3.8 Order Detail Page (<code>/account/orders/[id]</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Order Header</td><td>Order number, date, status badge</td></tr>
+    <tr><td>Status Timeline</td><td>Visual steps: Order Placed → Confirmed → Shipped → Delivered</td></tr>
+    <tr><td>Items Table</td><td>Product name, quantity, price, total</td></tr>
+    <tr><td>Shipping Info</td><td>Address, shipping method, tracking number (if shipped)</td></tr>
+    <tr><td>Payment Info</td><td>Payment method, transaction ID</td></tr>
+    <tr><td>Cancel Button</td><td>Show if order is pending or confirmed</td></tr>
+</table>
+
+<h3>3.9 Profile Page (<code>/account/profile</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Personal Info Form</td><td>First name, last name, email, phone</td></tr>
+    <tr><td>Address Form</td><td>Default shipping address</td></tr>
+    <tr><td>Change Password Section</td><td>Current password, new password, confirm new password</td></tr>
+    <tr><td>Save Button</td><td>Save all changes</td></tr>
+    <tr><td>Success/Error Messages</td><td>Toast notifications</td></tr>
+</table>
+
+<h3>3.10 Login Page (<code>/login</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Email Field</td><td>Text input, email validation</td></tr>
+    <tr><td>Password Field</td><td>Password input with show/hide toggle</td></tr>
+    <tr><td>Remember Me Checkbox</td><td>Stay logged in</td></tr>
+    <tr><td>Login Button</td><td>Submit form</td></tr>
+    <tr><td>Forgot Password Link</td><td>Link to reset password</td></tr>
+    <tr><td>Register Link</td><td>"Don't have an account? Sign up"</td></tr>
+</table>
+
+<h3>3.11 Register Page (<code>/register</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Name Fields</td><td>First name, last name (required)</td></tr>
+    <tr><td>Email Field</td><td>Valid email format (required)</td></tr>
+    <tr><td>Phone Field</td><td>Optional</td></tr>
+    <tr><td>Password Field</td><td>Minimum 8 characters (required)</td></tr>
+    <tr><td>Confirm Password Field</td><td>Must match password</td></tr>
+    <tr><td>Register Button</td><td>Submit form</td></tr>
+    <tr><td>Login Link</td><td>"Already have an account? Login"</td></tr>
+</table>
+
+<h3>3.12 Admin Dashboard (<code>/admin</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Admin Login</td><td>Separate authentication from customer login</td></tr>
+    <tr><td>Metrics Cards</td><td>Today's sales, total orders, total products, total customers</td></tr>
+    <tr><td>Recent Orders Table</td><td>Last 5 orders with customer name, total, status</td></tr>
+    <tr><td>Low Stock Alert</td><td>Products with quantity ≤ 5</td></tr>
+    <tr><td>Quick Actions</td><td>Buttons: Add Product, View All Orders</td></tr>
+    <tr><td>Navigation Sidebar</td><td>Links to Products, Orders, Customers</td></tr>
+</table>
+
+<h3>3.13 Admin Products Page (<code>/admin/products</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Product Table</td><td>Image, name, SKU, price, stock, status, actions (Edit/Delete)</td></tr>
+    <tr><td>Search Bar</td><td>Search by name or SKU</td></tr>
+    <tr><td>Add Product Button</td><td>Opens add product form</td></tr>
+    <tr><td>Edit Product Modal</td><td>Form to edit product details</td></tr>
+    <tr><td>Delete Confirmation</td><td>Confirm before deleting</td></tr>
+</table>
+
+<h3>3.14 Admin Orders Page (<code>/admin/orders</code>)</h3>
+<table>
+    <tr><th>Element</th><th>Requirement</th></tr>
+    <tr><td>Orders Table</td><td>Order ID, customer, date, total, status, actions</td></tr>
+    <tr><td>Status Filter</td><td>Dropdown to filter by status</td></tr>
+    <tr><td>Update Status</td><td>Dropdown to change order status</td></tr>
+    <tr><td>Add Tracking</td><td>Input field for tracking number when status is "Shipped"</td></tr>
+    <tr><td>View Order Details</td><td>Modal or separate page with full order info</td></tr>
+</table>
+
+<hr>
+
+<h2>4. 🔌 Backend API Requirements</h2>
+
+<h3>4.1 Authentication APIs</h3>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Request Body</th><th>Response</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/auth/register</td><td>{email, password, first_name, last_name, phone?}</td><td>{user, token}</td><td>Create new customer account</td></tr>
+    <tr><td>POST</td><td>/api/auth/login</td><td>{email, password}</td><td>{user, token}</td><td>Authenticate user</td></tr>
+    <tr><td>POST</td><td>/api/auth/logout</td><td>-</td><td>{message}</td><td>Invalidate token</td></tr>
+    <tr><td>GET</td><td>/api/auth/me</td><td>-</td><td>{user}</td><td>Get current logged-in user</td></tr>
+    <tr><td>PUT</td><td>/api/auth/me</td><td>{first_name, last_name, phone, address}</td><td>{user}</td><td>Update profile</td></tr>
+    <tr><td>PUT</td><td>/api/auth/change-password</td><td>{current_password, new_password}</td><td>{message}</td><td>Change password</td></tr>
+</table>
+
+<h3>4.2 Product APIs</h3>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Query Parameters</th><th>Response</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/products</td><td>page, limit, sort, category, search, min_price, max_price</td><td>{products, total, page, total_pages}</td><td>List products with filters</td></tr>
+    <tr><td>GET</td><td>/api/products/:slug</td><td>-</td><td>{product}</td><td>Get single product</td></tr>
+    <tr><td>GET</td><td>/api/categories</td><td>-</td><td>{categories}</td><td>Get all categories</td></tr>
+    <tr><td>GET</td><td>/api/products/featured</td><td>limit</td><td>{products}</td><td>Get featured products</td></tr>
+</table>
+
+<h3>4.3 Cart APIs</h3>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Request Body</th><th>Response</th><th>Description</th></tr>
+    <tr><td>GET</td><td>/api/cart</td><td>-</td><td>{items, total, item_count}</td><td>Get user's cart</td></tr>
+    <tr><td>POST</td><td>/api/cart</td><td>{product_id, quantity}</td><td>{cart}</td><td>Add item to cart</td></tr>
+    <tr><td>PUT</td><td>/api/cart/:item_id</td><td>{quantity}</td><td>{cart}</td><td>Update quantity</td></tr>
+    <tr><td>DELETE</td><td>/api/cart/:item_id</td><td>-</td><td>{message}</td><td>Remove item</td></tr>
+    <tr><td>DELETE</td><td>/api/cart</td><td>-</td><td>{message}</td><td>Clear cart</td></tr>
+</table>
+
+<h3>4.4 Order APIs</h3>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Request Body</th><th>Response</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/orders</td><td>{shipping_address, shipping_method, payment_method}</td><td>{order}</td><td>Create new order</td></tr>
+    <tr><td>GET</td><td>/api/orders</td><td>page, status</td><td>{orders, total}</td><td>Get user orders</td></tr>
+    <tr><td>GET</td><td>/api/orders/:id</td><td>-</td><td>{order}</td><td>Get order details</td></tr>
+    <tr><td>PUT</td><td>/api/orders/:id/cancel</td><td>-</td><td>{message}</td><td>Cancel order</td></tr>
+</table>
+
+<h3>4.5 Admin APIs</h3>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Request Body</th><th>Response</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/admin/products</td><td>{name, price, description, stock, category_id, images}</td><td>{product}</td><td>Add product</td></tr>
+    <tr><td>PUT</td><td>/api/admin/products/:id</td><td>{name, price, description, stock}</td><td>{product}</td><td>Update product</td></tr>
+    <tr><td>DELETE</td><td>/api/admin/products/:id</td><td>-</td><td>{message}</td><td>Delete product</td></tr>
+    <tr><td>GET</td><td>/api/admin/orders</td><td>page, status</td><td>{orders, total}</td><td>Get all orders</td></tr>
+    <tr><td>PUT</td><td>/api/admin/orders/:id/status</td><td>{status, tracking_number?}</td><td>{order}</td><td>Update order status</td></tr>
+    <tr><td>GET</td><td>/api/admin/dashboard</td><td>-</td><td>{metrics}</td><td>Dashboard statistics</td></tr>
+    <tr><td>GET</td><td>/api/admin/users</td><td>-</td><td>{users}</td><td>Get all users</td></tr>
+    <tr><td>PUT</td><td>/api/admin/users/:id/disable</td><td>-</td><td>{message}</td><td>Disable user</td></tr>
+</table>
+
+<hr>
+
+<h2>5. 📊 Data Models</h2>
+
+<h3>5.1 User Object</h3>
+<pre>{
+  "id": 1,
+  "email": "customer@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone": "+1234567890",
+  "is_admin": false,
+  "created_at": "2024-01-01T00:00:00Z"
+}</pre>
+
+<h3>5.2 Product Object</h3>
+<pre>{
+  "id": 1,
+  "name": "Wireless Headphones",
+  "slug": "wireless-headphones",
+  "short_description": "High-quality wireless headphones",
+  "description": "Full product description here...",
+  "price": 49.99,
+  "compare_at_price": 79.99,
+  "sku": "WH-001",
+  "quantity": 50,
+  "is_active": true,
+  "is_featured": false,
+  "category_id": 2,
+  "images": ["image1.jpg", "image2.jpg"],
+  "created_at": "2024-01-01T00:00:00Z"
+}</pre>
+
+<h3>5.3 Cart Object</h3>
+<pre>{
+  "items": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "name": "Wireless Headphones",
+      "price": 49.99,
+      "quantity": 2,
+      "image": "image1.jpg"
+    }
+  ],
+  "total": 99.98,
+  "item_count": 2
+}</pre>
+
+<h3>5.4 Order Object</h3>
+<pre>{
+  "id": 1001,
+  "order_number": "ORD-20241215-001",
+  "user_id": 1,
+  "status": "confirmed",
+  "subtotal": 99.98,
+  "shipping_cost": 0,
+  "total_amount": 99.98,
+  "shipping_address": {
+    "full_name": "John Doe",
+    "address_line1": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "pincode": "10001",
+    "phone": "+1234567890"
+  },
+  "shipping_method": "standard",
+  "payment_method": "cod",
+  "tracking_number": null,
+  "created_at": "2024-12-15T10:30:00Z"
+}</pre>
+
+<hr>
+
+<h2>6. 📐 Business Rules</h2>
+
+<h3>6.1 Order Rules</h3>
+<table>
+    <tr><th>Rule ID</th><th>Rule Description</th></tr>
+    <tr><td>OR1</td><td>Order number format: <code>ORD-YYYYMMDD-XXXXX</code> (auto-generated)</td></tr>
+    <tr><td>OR2</td><td>Order status flow: <code>pending</code> → <code>confirmed</code> → <code>shipped</code> → <code>delivered</code></td></tr>
+    <tr><td>OR3</td><td>Order can be cancelled only if status is <code>pending</code> or <code>confirmed</code></td></tr>
+    <tr><td>OR4</td><td>Cancelled orders cannot be modified</td></tr>
+</table>
+
+<h3>6.2 Cart Rules</h3>
+<table>
+    <tr><th>Rule ID</th><th>Rule Description</th></tr>
+    <tr><td>CR1</td><td>Cart persists for logged-in users (saved in database)</td></tr>
+    <tr><td>CR2</td><td>Guest cart saved in browser localStorage</td></tr>
+    <tr><td>CR3</td><td>When guest logs in, merge guest cart with existing user cart</td></tr>
+    <tr><td>CR4</td><td>Cart expires after 7 days of inactivity</td></tr>
+</table>
+
+<h3>6.3 Product Rules</h3>
+<table>
+    <tr><th>Rule ID</th><th>Rule Description</th></tr>
+    <tr><td>PR1</td><td>Product slug must be URL-friendly (auto-generated from name)</td></tr>
+    <tr><td>PR2</td><td>Product cannot be added to cart if <code>quantity = 0</code></td></tr>
+    <tr><td>PR3</td><td>Low stock alert triggers when <code>quantity ≤ low_stock_threshold</code></td></tr>
+    <tr><td>PR4</td><td>Product price cannot be negative</td></tr>
+</table>
+
+<h3>6.4 User Rules</h3>
+</table>
+    <tr><th>Rule ID</th><th>Rule Description</th></tr>
+    <tr><td>UR1</td><td>Email must be unique across all users</td> </tr>
+    <tr><td>UR2</td><td>Password must be at least 8 characters</td></tr>
+    <tr><td>UR3</td><td>First name and last name are required</td></tr>
+    <tr><td>UR4</td><td>Admin users cannot be created via registration (only database seeding)</td></tr>
+</table>
+
+<hr>
+
+<h2>7. ⚡ Non-Functional Requirements</h2>
+
+<h3>7.1 Performance</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th></tr>
+    <tr><td>P1</td><td>Home page loads within 3 seconds on 4G connection</td></tr>
+    <tr><td>P2</td><td>Product listing page loads within 2 seconds</td></tr>
+    <tr><td>P3</td><td>API response time under 500ms for 95% of requests</td></tr>
+    <tr><td>P4</td><td>Images lazy load to improve page speed</td></tr>
+</table>
+
+<h3>7.2 Security</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th></tr>
+    <tr><td>S1</td><td>Passwords hashed using bcrypt before storing</td></tr>
+    <tr><td>S2</td><td>JWT tokens expire after 24 hours</td></tr>
+    <tr><td>S3</td><td>All API endpoints (except login/register) require valid JWT</td></tr>
+    <tr><td>S4</td><td>Admin endpoints require <code>is_admin=true</code> in token</td></tr>
+    <tr><td>S5</td><td>HTTPS required for all requests</td></tr>
+</table>
+
+<h3>7.3 User Experience</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th></tr>
+    <tr><td>UX1</td><td>Mobile responsive (works on phones, tablets, desktops)</td></tr>
+    <tr><td>UX2</td><td>Loading spinners appear for all async operations</td></tr>
+    <tr><td>UX3</td><td>Toast notifications for success, error, and warning messages</td></tr>
+    <tr><td>UX4</td><td>Confirmation modal before destructive actions (delete, cancel order)</td></tr>
+    <tr><td>UX5</td><td>Form validation with real-time error messages</td></tr>
+</table>
+
+<h3>7.4 Browser Support</h3>
+<table>
+    <tr><th>ID</th><th>Requirement</th></tr>
+    <tr><td>BS1</td><td>Chrome (latest 2 versions)</td></tr>
+    <tr><td>BS2</td><td>Firefox (latest 2 versions)</td></tr>
+    <tr><td>BS3</td><td>Safari (latest 2 versions)</td></tr>
+    <tr><td>BS4</td><td>Edge (latest 2 versions)</td></tr>
+    <tr><td>BS5</td><td>Mobile: Chrome and Safari on iOS/Android</td></tr>
+</table>
+
+<hr>
+
+<h2>8. 📦 Deliverables & Acceptance Criteria</h2>
+
+<h3>8.1 Deliverables</h3>
+<table>
+    <tr><th>Deliverable</th><th>Format</th></tr>
+    <tr><td>Database Schema</td><td>SQL file</td></tr>
+    <tr><td>Backend API Code</td><td>Python/FastAPI repository</td></tr>
+    <tr><td>Frontend Code</td><td>Next.js repository</td></tr>
+    <tr><td>API Documentation</td><td>Swagger/OpenAPI (auto-generated)</td></tr>
+    <tr><td>Deployment</td><td>Live URL (Vercel + Render/Fly.io)</td></tr>
+    <tr><td>Admin Credentials</td><td>Test admin login details</td></tr>
+</table>
+
+<h3>8.2 Acceptance Criteria for Launch</h3>
+<table>
+    <tr><th>#</th><th>Criteria</th></tr>
+    <tr><td>AC1</td><td>User can register and login successfully</td></tr>
+    <tr><td>AC2</td><td>User can browse products and view details</td></tr>
+    <tr><td>AC3</td><td>User can add/remove items from cart</td></tr>
+    <tr><td>AC4</td><td>User can complete checkout and receive order confirmation</td></tr>
+    <tr><td>AC5</td><td>User can view order history and track orders</td></tr>
+    <tr><td>AC6</td><td>Admin can add, edit, and delete products</td></tr>
+    <tr><td>AC7</td><td>Admin can view and update order status</td></tr>
+    <tr><td>AC8</td><td>Admin can view dashboard with statistics</td></tr>
+    <tr><td>AC9</td><td>Site works on desktop, tablet, and mobile</td></tr>
+    <tr><td>AC10</td><td>All form validations work correctly</td></tr>
+</table>
+
+<hr>
+
+<h2>9. 🗺️ Sample User Flows</h2>
+
+<h3>9.1 Happy Path - Customer Purchase</h3>
+<pre>1. User visits website → Home page loads
+2. User clicks "Products" → Sees all products
+3. User clicks on "Wireless Headphones" → Product detail page
+4. User selects quantity "2" → Clicks "Add to Cart"
+5. User clicks cart icon → Views cart with items
+6. User clicks "Proceed to Checkout"
+7. User is prompted to login → Enters email/password
+8. User enters shipping address
+9. User selects "Standard Shipping"
+10. User selects "Cash on Delivery"
+11. User reviews order → Clicks "Place Order"
+12. User sees order confirmation page with order number
+13. User can track order from "My Orders" page</pre>
+
+<h3>9.2 Admin - Add Product Flow</h3>
+<pre>1. Admin visits /admin/login → Enters admin credentials
+2. Admin sees dashboard with metrics
+3. Admin clicks "Products" in sidebar
+4. Admin clicks "Add Product" button
+5. Admin fills form: name, price, description, stock, category
+6. Admin uploads product images
+7. Admin clicks "Save"
+8. Product appears in product list
+9. Product is visible on customer storefront</pre>
+
+<hr>
+
+<h2>10. ⚠️ Constraints & Assumptions</h2>
+
+<h3>10.1 Technical Constraints</h3>
+<table>
+    <tr><th>Constraint</th><th>Description</th></tr>
+    <tr><td>TC1</td><td>Backend must be built with Python (FastAPI)</td></tr>
+    <tr><td>TC2</td><td>Frontend must be built with Next.js (App Router)</td></tr>
+    <tr><td>TC3</td><td>Database must be PostgreSQL</td></tr>
+    <tr><td>TC4</td><td>Payment gateway integration is NOT required for MVP (use Cash on Delivery)</td></tr>
+    <tr><td>TC5</td><td>Email notifications NOT required for MVP</td></tr>
+</table>
+
+<h3>10.2 Assumptions</h3>
+<table>
+    <tr><th>Assumption</th><th>Description</th></tr>
+    <tr><td>AS1</td><td>Product images will be provided by developer (placeholder images initially)</td></tr>
+    <tr><td>AS2</td><td>Initial product data will be seeded by developer (dummy products for testing)</td></tr>
+    <tr><td>AS3</td><td>Hosting will be on free tiers (Vercel + Render/Fly.io)</td></tr>
+    <tr><td>AS4</td><td>Domain will be a free subdomain (e.g., project.vercel.app)</td></tr>
+    <tr><td>AS5</td><td>No payment gateway integration in MVP (COD only)</td></tr>
+</table>
+
+<hr>
+
+<h2>11. 🚫 Out of Scope (Phase 2)</h2>
+
+<table>
+    <tr><th>Feature</th><th>Reason</th></tr>
+    <tr><td>Payment gateway (Stripe/Razorpay)</td><td>Cash on Delivery sufficient for MVP</td></tr>
+    <tr><td>Email notifications</td><td>Can be added later</td></tr>
+    <tr><td>Password reset via email</td><td>Manual reset by admin initially</td></tr>
+    <tr><td>Product reviews and ratings</td><td>Phase 2 feature</td></tr>
+    <tr><td>Wishlist</td><td>Phase 2 feature</td></tr>
+    <tr><td>Search autocomplete</td><td>Phase 2 feature</td></tr>
+    <tr><td>Advanced analytics</td><td>Phase 2 feature</td></tr>
+    <tr><td>Multi-language support</td><td>Phase 2 feature</td></tr>
+    <tr><td>AI assistant</td><td>Phase 3 feature</td></tr>
+    <tr><td>Distributor management</td><td>Phase 3 feature</td></tr>
+    <tr><td>Bulk product import/export</td><td>Phase 2 feature</td></tr>
+    <tr><td>Discount coupons</td><td>Phase 2 feature</td></tr>
+</table>
+
+<hr>
+
+<h2>12. 📅 Development Timeline (Self-Guided)</h2>
+
+<div class="highlight">
+    <h3>Day 1: Setup</h3>
+    <ul>
+        <li>Create folder structure</li>
+        <li>Initialize PostgreSQL database</li>
+        <li>Run SQL schema</li>
+        <li>Set up Python virtual environment</li>
+        <li>Set up Next.js project</li>
+    </ul>
+
+    <h3>Day 2-3: Backend APIs</h3>
+    <ul>
+        <li>User registration/login</li>
+        <li>Product APIs</li>
+        <li>Cart APIs</li>
+        <li>Order APIs</li>
+    </ul>
+
+    <h3>Day 4-5: Frontend Pages</h3>
+    <ul>
+        <li>Home and Products page</li>
+        <li>Product detail page</li>
+        <li>Cart page</li>
+        <li>Checkout page</li>
+    </ul>
+
+    <h3>Day 6-7: User Account & Admin</h3>
+    <ul>
+        <li>Login/Register pages</li>
+        <li>My Orders page</li>
+        <li>Admin dashboard</li>
+        <li>Admin product management</li>
+    </ul>
+
+    <h3>Day 8: Testing & Deployment</h3>
+    <ul>
+        <li>Test all flows</li>
+        <li>Deploy to Vercel + Render</li>
+        <li>Seed initial products</li>
+    </ul>
+</div>
+
+<hr>
+
+<h2>13. ✅ Approval</h2>
+
+<table>
+    <tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr>
+    <tr><td>Client (You)</td><td>___________</td><td>___________</td><td>___________</td></tr>
+    <tr><td>Developer (You)</td><td>___________</td><td>___________</td><td>___________</td></tr>
+</table>
+
+<hr>
+
+<div class="footer">
+    <p><strong>Document Status:</strong> Ready for Development</p>
+    <p><strong>Next Step:</strong> Start coding! Follow the timeline above.</p>
+    <p>Built with Python + Next.js + PostgreSQL | Zero Budget | Open Source</p>
+</div>
+
+</body>
+</html>
