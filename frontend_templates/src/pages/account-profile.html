@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - ShopHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       SHARED STYLES
+       ======================================== */
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --primary-light: #fdba74;
+      --secondary: #f59e0b;
+      --dark: #1f2937;
+      --light: #fff7ed;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --radius: 1rem;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 20px 40px rgba(249, 115, 22, 0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f8fafc;
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ========================================
+       HEADER (same as other pages)
+       ======================================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+      border-bottom: 3px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .header.scrolled { padding: 0.3rem 0; box-shadow: 0 4px 30px rgba(249, 115, 22, 0.25); }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .logo:hover { transform: scale(1.05); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after { width: 100%; }
+
+    .nav-link:hover { color: var(--primary); }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: rgba(249, 115, 22, 0.08);
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem;
+      border-radius: 50%;
+      transition: var(--transition);
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: rgba(249, 115, 22, 0.2);
+      transform: scale(1.1);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-dropdown { position: relative; }
+
+    .lang-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    .lang-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 150px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: var(--transition);
+      z-index: 100;
+      border: 1px solid var(--primary-light);
+    }
+
+    .lang-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      border: none;
+      background: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .lang-option:hover { background: rgba(249, 115, 22, 0.1); }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--dark);
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 1rem 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .mobile-menu.active {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      border-bottom: 1px solid #f3f4f6;
+      transition: var(--transition);
+    }
+
+    .mobile-menu a:hover {
+      color: var(--primary);
+      padding-left: 0.5rem;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-scaleIn { animation: scaleIn 0.5s ease-out; }
+    .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+      transform: translateY(-3px);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-3px);
+    }
+
+    .btn-block {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ========================================
+       ACCOUNT LAYOUT
+       ======================================== */
+    .account-page {
+      padding: 2rem 0;
+    }
+
+    .account-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Sidebar */
+    .account-sidebar {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .account-sidebar .user-info {
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 1.5rem;
+    }
+
+    .account-sidebar .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 auto 0.75rem;
+    }
+
+    .account-sidebar .user-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .account-sidebar .user-email {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: var(--dark);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .sidebar-menu a:hover {
+      background: rgba(249, 115, 22, 0.08);
+      color: var(--primary);
+    }
+
+    .sidebar-menu a.active {
+      background: rgba(249, 115, 22, 0.12);
+      color: var(--primary);
+    }
+
+    .sidebar-menu a .icon {
+      font-size: 1.2rem;
+      width: 24px;
+    }
+
+    /* Profile Content */
+    .profile-content {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-content .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-light);
+    }
+
+    .profile-content .header-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* Profile Avatar Upload */
+    .profile-avatar-section {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-avatar {
+      position: relative;
+      display: inline-block;
+    }
+
+    .profile-avatar .avatar-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--primary-light);
+      background: var(--gray-light);
+    }
+
+    .profile-avatar .avatar-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .profile-avatar .avatar-overlay:hover {
+      transform: scale(1.1);
+      background: var(--primary-dark);
+    }
+
+    .profile-avatar .avatar-overlay input {
+      display: none;
+    }
+
+    /* Profile Form */
+    .profile-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group label .required {
+      color: var(--danger);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: white;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .form-group input:disabled {
+      background: var(--gray-light);
+      cursor: not-allowed;
+    }
+
+    .form-group input.error {
+      border-color: var(--danger);
+    }
+
+    .form-group .helper-text {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    .form-group .error-text {
+      font-size: 0.8rem;
+      color: var(--danger);
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-group.error .error-text {
+      display: block;
+    }
+
+    /* Change Password Section */
+    .password-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .password-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .password-section .form-row {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      animation: slideInRight 0.3s ease-out;
+      font-weight: 600;
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #9ca3af;
+      padding: 3rem 0 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer h4 {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+      padding: 0.25rem 0;
+    }
+
+    .footer a:hover { color: var(--primary); }
+
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1024px) {
+      .account-layout {
+        grid-template-columns: 1fr;
+      }
+      .account-sidebar {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+
+      .profile-form .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .password-section .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-content { padding: 1rem; }
+
+      .header-inner { padding: 0.75rem 0; }
+      .logo { font-size: 1.4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .profile-avatar .avatar-img {
+        width: 100px;
+        height: 100px;
+      }
+      .profile-content .header-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">🛍️ ShopHub</a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLang()">🌐 EN ▼</button>
+          <div class="lang-menu" id="langMenu">
+            <button class="lang-option" onclick="setLang('en')">🇺🇸 English</button>
+            <button class="lang-option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+            <button class="lang-option" onclick="setLang('es')">🇪🇸 Español</button>
+            <button class="lang-option" onclick="setLang('ar')">🇸🇦 العربية</button>
+          </div>
+        </div>
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <a href="cart.html" class="icon-btn">
+          🛒
+          <span class="cart-badge">3</span>
+        </a>
+        <a href="login.html" class="icon-btn">👤</a>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== PROFILE PAGE ========== -->
+<section class="account-page">
+  <div class="container">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">👤 My Profile</h1>
+    <p style="color: var(--gray); margin-bottom: 2rem;">Manage your account information and preferences.</p>
+
+    <div class="account-layout">
+      <!-- Sidebar -->
+      <aside class="account-sidebar animate-scaleIn">
+        <div class="user-info">
+          <div class="avatar">JD</div>
+          <div class="user-name">John Doe</div>
+          <div class="user-email">john@example.com</div>
+        </div>
+
+        <ul class="sidebar-menu">
+          <li><a href="account-orders.html"><span class="icon">📦</span> Orders</a></li>
+          <li><a href="account-profile.html" class="active"><span class="icon">👤</span> Profile</a></li>
+          <li><a href="account-wishlist.html"><span class="icon">❤️</span> Wishlist</a></li>
+          <li><a href="account-addresses.html"><span class="icon">📍</span> Addresses</a></li>
+          <li><a href="account-payment.html"><span class="icon">💳</span> Payment Methods</a></li>
+          <li><a href="logout.html" style="color: var(--danger);"><span class="icon">🚪</span> Logout</a></li>
+        </ul>
+      </aside>
+
+      <!-- Profile Content -->
+      <div class="profile-content animate-scaleIn">
+        <div class="header-section">
+          <h2>Personal Information</h2>
+          <span style="color: var(--gray); font-size: 0.9rem;">Last updated: Dec 15, 2024</span>
+        </div>
+
+        <!-- Avatar Upload -->
+        <div class="profile-avatar-section">
+          <div class="profile-avatar">
+            <img src="https://ui-avatars.com/api/?name=John+Doe&background=f97316&color=fff&size=120" alt="Avatar" class="avatar-img" id="avatarPreview">
+            <label class="avatar-overlay" for="avatarUpload">
+              📷
+              <input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatar(event)">
+            </label>
+          </div>
+          <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">Click the camera icon to upload a new photo</p>
+        </div>
+
+        <!-- Profile Form -->
+        <form class="profile-form" id="profileForm" onsubmit="saveProfile(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name <span class="required">*</span></label>
+              <input type="text" id="firstName" value="John" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name <span class="required">*</span></label>
+              <input type="text" id="lastName" value="Doe" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address <span class="required">*</span></label>
+              <input type="email" id="email" value="john@example.com" disabled>
+              <span class="helper-text">Email cannot be changed</span>
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span class="required">*</span></label>
+              <input type="tel" id="phone" value="+1 (555) 123-4567" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea id="bio" rows="3" placeholder="Tell us a little about yourself...">Tech enthusiast, coffee lover, and occasional traveler. Always looking for the next adventure.</textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="dob" value="1995-06-15">
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="gender">
+                <option value="">Prefer not to say</option>
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            <button type="reset" class="btn btn-secondary">↩️ Reset</button>
+          </div>
+        </form>
+
+        <!-- Change Password Section -->
+        <div class="password-section">
+          <h3>🔐 Change Password</h3>
+          <form id="passwordForm" onsubmit="changePassword(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Current Password <span class="required">*</span></label>
+                <input type="password" id="currentPassword" placeholder="Enter current password" required>
+              </div>
+              <div class="form-group">
+                <label>New Password <span class="required">*</span></label>
+                <input type="password" id="newPassword" placeholder="Enter new password" required minlength="8">
+                <span class="helper-text">Minimum 8 characters</span>
+              </div>
+              <div class="form-group">
+                <label>Confirm New Password <span class="required">*</span></label>
+                <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">🔄 Update Password</button>
+          </form>
+        </div>
+
+        <!-- Account Actions -->
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn btn-danger" onclick="deactivateAccount()">⚠️ Deactivate Account</button>
+          <button class="btn btn-secondary" onclick="exportData()">📥 Export My Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4 style="font-size: 1.5rem;">🛍️ ShopHub</h4><p style="margin-top: 0.5rem;">Your one-stop destination for amazing products.</p></div>
+      <div><h4>Quick Links</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+      <div><h4>Support</h4><a href="#">FAQ</a><a href="#">Shipping Info</a><a href="#">Returns</a></div>
+      <div><h4>Follow Us</h4><a href="#">📘 Facebook</a><a href="#">📷 Instagram</a><a href="#">🐦 Twitter</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 ShopHub. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+  // ========================================
+  // PROFILE FUNCTIONS
+  // ========================================
+
+  // Avatar Upload
+  function uploadAvatar(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('avatarPreview').src = e.target.result;
+        showToast('✅ Avatar updated successfully!');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Save Profile
+  function saveProfile(event) {
+    event.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    // Basic validation
+    if (!firstName || !lastName || !phone) {
+      showToast('⚠️ Please fill in all required fields.', 'error');
+      return;
+    }
+
+    // Simulate saving
+    const btn = event.submitter;
+    const originalText = btn.textContent;
+    btn.textContent = '⏳ Saving...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      showToast('✅ Profile updated successfully!');
+    }, 1000);
+  }
+
+  // Change Password
+  function changePassword(event) {
+    event.preventDefault();
+
+    const current = document.getElementById('currentPassword').value;
+    const newPass = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+
+    if (!current || !newPass || !confirm) {
+      showToast('⚠️ Please fill in all password fields.', 'error');
+      return;
+    }
+
+    if (newPass !== confirm) {
+      showToast('⚠️ New passwords do not match.', 'error');
+      return;
+    }
+
+    if (newPass.length < 8) {
+      showToast('⚠️ Password must be at least 8 characters.', 'error');
+      return;
+    }
+
+    // Simulate saving
+    const btn = event.submitter;
+    const originalText = btn.textContent;
+    btn.textContent = '⏳ Updating...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      document.getElementById('passwordForm').reset();
+      showToast('✅ Password updated successfully!');
+    }, 1000);
+  }
+
+  // Deactivate Account
+  function deactivateAccount() {
+    if (confirm('⚠️ Are you sure you want to deactivate your account? This action cannot be undone.')) {
+      if (confirm('All your data will be permanently deleted. Continue?')) {
+        showToast('⚠️ Account deactivation requested. You will be contacted shortly.');
+      }
+    }
+  }
+
+  // Export Data
+  function exportData() {
+    showToast('📥 Your data export is being prepared. You will receive an email shortly.');
+  }
+
+  // ========================================
+  // TOAST NOTIFICATION
+  // ========================================
+  function showToast(message, type = 'success') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // ========================================
+  // HEADER FUNCTIONS
+  // ========================================
+  function toggleLang() {
+    document.getElementById('langMenu').classList.toggle('active');
+  }
+
+  function setLang(lang) {
+    document.getElementById('langMenu').classList.remove('active');
+    document.querySelector('.lang-btn').innerHTML = `🌐 ${lang.toUpperCase()} ▼`;
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const btn = document.getElementById('themeBtn');
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  }
+
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+  }
+
+  // ========================================
+  // INITIALIZATION
+  // ========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('themeBtn').textContent = '☀️';
+    }
+
+    // Sticky header
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Close language menu on outside click
+    document.addEventListener('click', (event) => {
+      const langMenu = document.getElementById('langMenu');
+      if (langMenu && !event.target.closest('.lang-dropdown')) {
+        langMenu.classList.remove('active');
+      }
+    });
+
+    // Password confirmation validation
+    const newPass = document.getElementById('newPassword');
+    const confirmPass = document.getElementById('confirmPassword');
+
+    confirmPass.addEventListener('input', () => {
+      if (newPass.value !== confirmPass.value) {
+        confirmPass.setCustomValidity('Passwords do not match');
+      } else {
+        confirmPass.setCustomValidity('');
+      }
+    });
+  });
+</script>
+</body>
+</html>

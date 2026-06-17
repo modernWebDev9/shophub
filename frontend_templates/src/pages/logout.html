@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logging Out - ShopHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       SHARED STYLES
+       ======================================== */
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --primary-light: #fdba74;
+      --secondary: #f59e0b;
+      --dark: #1f2937;
+      --light: #fff7ed;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --radius: 1rem;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+
+    /* ========================================
+       HEADER
+       ======================================== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+      border-bottom: 3px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .logo:hover { transform: scale(1.05); }
+
+    /* ========================================
+       LOGOUT CARD
+       ======================================== */
+    .logout-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem 2rem;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .logout-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      text-align: center;
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logout-card .icon {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .logout-card .icon.spinning {
+      animation: spin 1.5s linear infinite;
+    }
+
+    .logout-card h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .logout-card .subtitle {
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+    }
+
+    .logout-card .timer {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+
+    .logout-card .message {
+      color: var(--gray);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .logout-card .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.8rem;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      min-width: 140px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+      transform: translateY(-3px);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+      transform: translateY(-3px);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #9ca3af;
+      padding: 1.5rem 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 768px) {
+      .logout-card { padding: 2rem 1.5rem; }
+      .logout-card .icon { font-size: 3.5rem; }
+      .logout-card h2 { font-size: 1.5rem; }
+      .btn { min-width: 120px; padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+    }
+
+    @media (max-width: 480px) {
+      .logout-card .btn-group { flex-direction: column; align-items: center; }
+      .btn { width: 100%; }
+      .container { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">🛍️ ShopHub</a>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="btn btn-secondary btn-sm" onclick="window.location.href='index.html'" style="min-width: auto; padding: 0.4rem 1rem; font-size: 0.85rem;">🏠 Home</button>
+        <button class="btn btn-primary btn-sm" onclick="window.location.href='login.html'" style="min-width: auto; padding: 0.4rem 1rem; font-size: 0.85rem;">🔐 Login</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== LOGOUT CARD ========== -->
+<div class="logout-container">
+  <div class="logout-card">
+    <span class="icon spinning">🚪</span>
+    <h2>Logging Out</h2>
+    <p class="subtitle">You are being securely logged out of your account.</p>
+
+    <div class="timer" id="countdown">3</div>
+
+    <p class="message" id="statusMessage">Please wait while we securely log you out...</p>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="stayLoggedIn()" id="stayBtn">🔐 Stay Logged In</button>
+      <button class="btn btn-danger" onclick="confirmLogout()" id="logoutBtn">🚪 Logout Now</button>
+    </div>
+
+    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+      <p style="font-size: 0.85rem; color: var(--gray);">
+        👤 Logged in as <strong>john@example.com</strong>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2024 ShopHub. All rights reserved. | Secure Logout</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+  // ========================================
+  // LOGOUT LOGIC
+  // ========================================
+  let countdown = 3;
+  let timerInterval;
+  let isLoggingOut = false;
+
+  const countdownEl = document.getElementById('countdown');
+  const statusMessage = document.getElementById('statusMessage');
+  const stayBtn = document.getElementById('stayBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  function startLogoutTimer() {
+    timerInterval = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+
+      if (countdown <= 0) {
+        clearInterval(timerInterval);
+        performLogout();
+      }
+    }, 1000);
+  }
+
+  function performLogout() {
+    if (isLoggingOut) return;
+    isLoggingOut = true;
+
+    countdownEl.textContent = '⏳';
+    statusMessage.textContent = '🔄 Clearing session data...';
+    stayBtn.disabled = true;
+    logoutBtn.disabled = true;
+
+    // Simulate logout process
+    setTimeout(() => {
+      statusMessage.textContent = '🗑️ Removing cached data...';
+    }, 500);
+
+    setTimeout(() => {
+      statusMessage.textContent = '✅ Session cleared successfully!';
+    }, 1000);
+
+    setTimeout(() => {
+      // Final logout - redirect to login
+      statusMessage.textContent = '🔐 Redirecting to login page...';
+      // In a real app, you would clear JWT token, session, etc.
+      localStorage.clear();
+      sessionStorage.clear();
+      setTimeout(() => {
+        window.location.href = 'login.html?logout=success';
+      }, 500);
+    }, 1500);
+  }
+
+  function stayLoggedIn() {
+    clearInterval(timerInterval);
+    countdown = 3;
+    countdownEl.textContent = countdown;
+    statusMessage.textContent = '✅ You are still logged in. Redirecting to homepage...';
+    stayBtn.textContent = '✅ Staying...';
+    stayBtn.disabled = true;
+    logoutBtn.disabled = true;
+
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+  }
+
+  function confirmLogout() {
+    if (confirm('Are you sure you want to log out immediately?')) {
+      clearInterval(timerInterval);
+      performLogout();
+    }
+  }
+
+  // ========================================
+  // INITIALIZATION
+  // ========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    // Start the countdown
+    startLogoutTimer();
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !isLoggingOut) {
+        stayLoggedIn();
+      }
+      if (e.key === 'Escape' && !isLoggingOut) {
+        confirmLogout();
+      }
+    });
+  });
+</script>
+</body>
+</html>

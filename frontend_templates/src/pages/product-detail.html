@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail - ShopHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- Header (same as before) -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">🛍️ ShopHub</a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link active">Products</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="lang-btn" onclick="toggleLang()">🌐 EN ▼</button>
+        <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+        <a href="cart.html" class="icon-btn">🛒<span class="cart-badge">3</span></a>
+        <a href="login.html" class="icon-btn">👤</a>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== PRODUCT DETAIL ========== -->
+<section style="padding: 2rem 0;">
+  <div class="container">
+    <div style="margin-bottom: 1.5rem;">
+      <a href="products.html" style="color: var(--gray); text-decoration: none;">← Back to Products</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; background: white; border-radius: var(--radius); padding: 2.5rem; box-shadow: var(--shadow);">
+      <!-- Product Images -->
+      <div>
+        <div style="position: relative; border-radius: var(--radius); overflow: hidden; background: var(--gray-light); height: 450px;">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800" alt="Product" style="width: 100%; height: 100%; object-fit: cover;">
+          <span class="product-badge hot" style="position: absolute; top: 1rem; right: 1rem;">🔥 Hot</span>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100" alt="Thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; cursor: pointer; border: 2px solid var(--primary);">
+          <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=100" alt="Thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; cursor: pointer;">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100" alt="Thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; cursor: pointer;">
+        </div>
+      </div>
+      
+      <!-- Product Info -->
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <span style="background: var(--gray-light); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">SONY</span>
+        </div>
+        <h1 style="font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem;">Wireless Headphones</h1>
+        
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.25rem;">
+            <span style="color: #f59e0b;">★★★★★</span>
+            <span style="font-weight: 600;">4.5</span>
+          </div>
+          <span style="color: var(--gray);">|</span>
+          <span style="color: var(--gray);">128 reviews</span>
+          <span style="color: var(--gray);">|</span>
+          <span style="color: var(--success);">✓ 50+ sold</span>
+        </div>
+        
+        <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem;">
+          <span style="font-size: 2.5rem; font-weight: 700; color: var(--primary);">$79.99</span>
+          <span style="font-size: 1.25rem; color: var(--gray); text-decoration: line-through;">$129.99</span>
+          <span style="background: var(--danger); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">-38%</span>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+          <span style="color: var(--success); font-weight: 600;">✓ In Stock (50 available)</span>
+        </div>
+        
+        <p style="color: var(--gray); margin-bottom: 1.5rem; line-height: 1.8;">
+          Experience crystal clear sound with 30-hour battery life and active noise cancellation. Perfect for travel and daily use.
+        </p>
+        
+        <!-- Quantity -->
+        <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <span style="font-weight: 600;">Quantity:</span>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <button style="width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--gray-light); font-size: 1.25rem; cursor: pointer;">-</button>
+            <span style="font-size: 1.25rem; font-weight: 600; min-width: 40px; text-align: center;">1</span>
+            <button style="width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--gray-light); font-size: 1.25rem; cursor: pointer;">+</button>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+          <button class="btn btn-primary btn-lg" style="flex: 1;" onclick="addToCart(1)">🛒 Add to Cart</button>
+          <button class="btn btn-secondary btn-lg">❤️ Wishlist</button>
+        </div>
+        
+        <!-- Trust Badges -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+          <div style="text-align: center;">
+            <div style="font-size: 2rem;">🚚</div>
+            <p style="font-size: 0.75rem; color: var(--gray);">Free Shipping</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 2rem;">🔄</div>
+            <p style="font-size: 0.75rem; color: var(--gray);">30-Day Returns</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 2rem;">🔒</div>
+            <p style="font-size: 0.75rem; color: var(--gray);">Secure Payment</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div style="background: white; border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 2rem; overflow: hidden;">
+      <div style="display: flex; border-bottom: 1px solid #e5e7eb;">
+        <button style="padding: 1rem 2rem; border: none; background: none; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--primary); cursor: pointer;">Description</button>
+        <button style="padding: 1rem 2rem; border: none; background: none; font-weight: 600; color: var(--gray); cursor: pointer;">Specifications</button>
+        <button style="padding: 1rem 2rem; border: none; background: none; font-weight: 600; color: var(--gray); cursor: pointer;">Reviews (128)</button>
+      </div>
+      <div style="padding: 2rem;">
+        <p style="line-height: 1.8; color: var(--gray);">
+          Experience premium sound quality with our wireless headphones. Featuring active noise cancellation, 30-hour battery life, and comfortable ear cushions for extended listening sessions. Perfect for travel, work, or daily use.
+        </p>
+        <ul style="margin-top: 1rem; list-style: none; display: grid; gap: 0.5rem;">
+          <li>✓ Active Noise Cancellation</li>
+          <li>✓ 30-Hour Battery Life</li>
+          <li>✓ Bluetooth 5.0 Connectivity</li>
+          <li>✓ Comfortable Ear Cushions</li>
+          <li>✓ Built-in Microphone</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer (same as before) -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4 style="font-size: 1.5rem;">🛍️ ShopHub</h4><p>Your one-stop destination for amazing products.</p></div>
+      <div><h4>Quick Links</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+      <div><h4>Support</h4><a href="#">FAQ</a><a href="#">Shipping Info</a><a href="#">Returns</a></div>
+      <div><h4>Follow Us</h4><a href="#">📘 Facebook</a><a href="#">📷 Instagram</a><a href="#">🐦 Twitter</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 ShopHub. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  function addToCart(id) {
+    alert(`Product ${id} added to cart!`);
+    const badge = document.querySelector('.cart-badge');
+    const current = parseInt(badge.textContent) || 0;
+    badge.textContent = current + 1;
+  }
+  
+  function toggleLang() {
+    document.getElementById('langMenu')?.classList.toggle('active');
+  }
+  
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+  }
+  
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+  }
+</script>
+</body>
+</html>

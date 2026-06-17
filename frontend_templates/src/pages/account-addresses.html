@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Addresses - ShopHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       SHARED STYLES
+       ======================================== */
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --primary-light: #fdba74;
+      --secondary: #f59e0b;
+      --dark: #1f2937;
+      --light: #fff7ed;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --radius: 1rem;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 20px 40px rgba(249, 115, 22, 0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f8fafc;
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ========================================
+       HEADER (same as other pages)
+       ======================================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+      border-bottom: 3px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .header.scrolled { padding: 0.3rem 0; box-shadow: 0 4px 30px rgba(249, 115, 22, 0.25); }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .logo:hover { transform: scale(1.05); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after { width: 100%; }
+
+    .nav-link:hover { color: var(--primary); }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: rgba(249, 115, 22, 0.08);
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem;
+      border-radius: 50%;
+      transition: var(--transition);
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: rgba(249, 115, 22, 0.2);
+      transform: scale(1.1);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-dropdown { position: relative; }
+
+    .lang-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    .lang-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 150px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: var(--transition);
+      z-index: 100;
+      border: 1px solid var(--primary-light);
+    }
+
+    .lang-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      border: none;
+      background: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .lang-option:hover { background: rgba(249, 115, 22, 0.1); }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--dark);
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 1rem 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .mobile-menu.active {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      border-bottom: 1px solid #f3f4f6;
+      transition: var(--transition);
+    }
+
+    .mobile-menu a:hover {
+      color: var(--primary);
+      padding-left: 0.5rem;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-scaleIn { animation: scaleIn 0.5s ease-out; }
+    .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+      transform: translateY(-3px);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .btn-sm {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    /* ========================================
+       ACCOUNT LAYOUT
+       ======================================== */
+    .account-page {
+      padding: 2rem 0;
+    }
+
+    .account-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Sidebar */
+    .account-sidebar {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .account-sidebar .user-info {
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 1.5rem;
+    }
+
+    .account-sidebar .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 auto 0.75rem;
+    }
+
+    .account-sidebar .user-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .account-sidebar .user-email {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: var(--dark);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .sidebar-menu a:hover {
+      background: rgba(249, 115, 22, 0.08);
+      color: var(--primary);
+    }
+
+    .sidebar-menu a.active {
+      background: rgba(249, 115, 22, 0.12);
+      color: var(--primary);
+    }
+
+    .sidebar-menu a .icon {
+      font-size: 1.2rem;
+      width: 24px;
+    }
+
+    /* Addresses Content */
+    .addresses-content {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .addresses-content .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-light);
+    }
+
+    .addresses-content .header-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* Address Card */
+    .address-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .address-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .address-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: var(--shadow);
+    }
+
+    .address-card.default {
+      border-color: var(--primary);
+      background: rgba(249, 115, 22, 0.03);
+    }
+
+    .address-card .badge {
+      position: absolute;
+      top: -10px;
+      right: 1rem;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.8rem;
+      border-radius: 9999px;
+    }
+
+    .address-card .name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .address-card .address-line {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .address-card .phone {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .address-card .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* Add Address Form */
+    .add-address-form {
+      background: var(--gray-light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .add-address-form.open {
+      display: block;
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .add-address-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.6rem 0.9rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .form-group .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Empty State */
+    .empty-addresses {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .empty-addresses .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-addresses h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-addresses p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      animation: slideInRight 0.3s ease-out;
+      font-weight: 600;
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #9ca3af;
+      padding: 3rem 0 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer h4 {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+      padding: 0.25rem 0;
+    }
+
+    .footer a:hover { color: var(--primary); }
+
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1024px) {
+      .account-layout { grid-template-columns: 1fr; }
+      .account-sidebar { position: relative; top: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+
+      .address-grid { grid-template-columns: 1fr; }
+      .add-address-form .form-row { grid-template-columns: 1fr; }
+
+      .addresses-content { padding: 1rem; }
+      .header-inner { padding: 0.75rem 0; }
+      .logo { font-size: 1.4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .addresses-content .header-section { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">🛍️ ShopHub</a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLang()">🌐 EN ▼</button>
+          <div class="lang-menu" id="langMenu">
+            <button class="lang-option" onclick="setLang('en')">🇺🇸 English</button>
+            <button class="lang-option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+            <button class="lang-option" onclick="setLang('es')">🇪🇸 Español</button>
+            <button class="lang-option" onclick="setLang('ar')">🇸🇦 العربية</button>
+          </div>
+        </div>
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <a href="cart.html" class="icon-btn">
+          🛒
+          <span class="cart-badge">3</span>
+        </a>
+        <a href="login.html" class="icon-btn">👤</a>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== ADDRESSES PAGE ========== -->
+<section class="account-page">
+  <div class="container">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">📍 My Addresses</h1>
+    <p style="color: var(--gray); margin-bottom: 2rem;">Manage your shipping and billing addresses.</p>
+
+    <div class="account-layout">
+      <aside class="account-sidebar animate-scaleIn">
+        <div class="user-info">
+          <div class="avatar">JD</div>
+          <div class="user-name">John Doe</div>
+          <div class="user-email">john@example.com</div>
+        </div>
+        <ul class="sidebar-menu">
+          <li><a href="account-orders.html"><span class="icon">📦</span> Orders</a></li>
+          <li><a href="account-profile.html"><span class="icon">👤</span> Profile</a></li>
+          <li><a href="account-wishlist.html"><span class="icon">❤️</span> Wishlist</a></li>
+          <li><a href="account-addresses.html" class="active"><span class="icon">📍</span> Addresses</a></li>
+          <li><a href="account-payment.html"><span class="icon">💳</span> Payment Methods</a></li>
+          <li><a href="logout.html" style="color: var(--danger);"><span class="icon">🚪</span> Logout</a></li>
+        </ul>
+      </aside>
+
+      <div class="addresses-content animate-scaleIn">
+        <div class="header-section">
+          <div>
+            <h2>Saved Addresses</h2>
+            <span style="color: var(--gray); font-size: 0.9rem;"><span id="addressCount">2</span> addresses</span>
+          </div>
+          <button class="btn btn-primary" onclick="toggleAddressForm()">➕ Add New Address</button>
+        </div>
+
+        <!-- Add Address Form -->
+        <div class="add-address-form" id="addressForm">
+          <h3 style="margin-bottom: 1rem;">Add New Address</h3>
+          <form onsubmit="saveAddress(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="addrFullName" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" id="addrPhone" placeholder="+1 (555) 123-4567" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="addrStreet" placeholder="123 Main Street" required>
+            </div>
+            <div class="form-group">
+              <label>Apartment, Suite, etc. (Optional)</label>
+              <input type="text" id="addrApt" placeholder="Apt 4B">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City *</label>
+                <input type="text" id="addrCity" placeholder="New York" required>
+              </div>
+              <div class="form-group">
+                <label>State/Province *</label>
+                <input type="text" id="addrState" placeholder="NY" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Postal Code *</label>
+                <input type="text" id="addrZip" placeholder="10001" required>
+              </div>
+              <div class="form-group">
+                <label>Country *</label>
+                <select id="addrCountry" required>
+                  <option value="">Select Country</option>
+                  <option value="US" selected>United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="IN">India</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="addrDefault"> Set as default address
+              </label>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+              <button type="submit" class="btn btn-primary">💾 Save Address</button>
+              <button type="button" class="btn btn-secondary" onclick="toggleAddressForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Address Grid -->
+        <div id="addressGrid" class="address-grid">
+          <!-- Addresses loaded by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4 style="font-size: 1.5rem;">🛍️ ShopHub</h4><p style="margin-top: 0.5rem;">Your one-stop destination for amazing products.</p></div>
+      <div><h4>Quick Links</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+      <div><h4>Support</h4><a href="#">FAQ</a><a href="#">Shipping Info</a><a href="#">Returns</a></div>
+      <div><h4>Follow Us</h4><a href="#">📘 Facebook</a><a href="#">📷 Instagram</a><a href="#">🐦 Twitter</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 ShopHub. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script>
+  // ========================================
+  // ADDRESS DATA
+  // ========================================
+  let addresses = [
+    {
+      id: 1,
+      full_name: 'John Doe',
+      phone: '+1 (555) 123-4567',
+      street: '123 Main Street',
+      apt: '',
+      city: 'New York',
+      state: 'NY',
+      zip: '10001',
+      country: 'United States',
+      is_default: true
+    },
+    {
+      id: 2,
+      full_name: 'John Doe',
+      phone: '+1 (555) 987-6543',
+      street: '456 Park Avenue',
+      apt: 'Suite 202',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip: '90210',
+      country: 'United States',
+      is_default: false
+    }
+  ];
+
+  let addressIdCounter = 3;
+
+  function renderAddresses() {
+    const container = document.getElementById('addressGrid');
+    const count = document.getElementById('addressCount');
+
+    count.textContent = addresses.length;
+
+    if (addresses.length === 0) {
+      container.innerHTML = `
+        <div class="empty-addresses" style="grid-column: 1 / -1;">
+          <div class="icon">📍</div>
+          <h3>No addresses saved</h3>
+          <p>Add your first shipping address to make checkout faster.</p>
+          <button class="btn btn-primary" onclick="toggleAddressForm()">➕ Add Address</button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = addresses.map(addr => `
+      <div class="address-card ${addr.is_default ? 'default' : ''}">
+        ${addr.is_default ? '<span class="badge">Default</span>' : ''}
+        <div class="name">${addr.full_name}</div>
+        <div class="address-line">${addr.street}${addr.apt ? ', ' + addr.apt : ''}</div>
+        <div class="address-line">${addr.city}, ${addr.state} ${addr.zip}</div>
+        <div class="address-line">${addr.country}</div>
+        <div class="phone">📞 ${addr.phone}</div>
+        <div class="actions">
+          <button class="btn btn-secondary btn-sm" onclick="editAddress(${addr.id})">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAddress(${addr.id})">🗑️ Delete</button>
+          ${!addr.is_default ? `<button class="btn btn-primary btn-sm" onclick="setDefault(${addr.id})">⭐ Set Default</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function saveAddress(event) {
+    event.preventDefault();
+    const newAddr = {
+      id: addressIdCounter++,
+      full_name: document.getElementById('addrFullName').value.trim(),
+      phone: document.getElementById('addrPhone').value.trim(),
+      street: document.getElementById('addrStreet').value.trim(),
+      apt: document.getElementById('addrApt').value.trim(),
+      city: document.getElementById('addrCity').value.trim(),
+      state: document.getElementById('addrState').value.trim(),
+      zip: document.getElementById('addrZip').value.trim(),
+      country: document.getElementById('addrCountry').value,
+      is_default: document.getElementById('addrDefault').checked
+    };
+
+    if (newAddr.is_default) {
+      addresses.forEach(a => a.is_default = false);
+    }
+
+    addresses.push(newAddr);
+    renderAddresses();
+    toggleAddressForm();
+    showToast('✅ Address added successfully!');
+    document.getElementById('addressForm').querySelector('form').reset();
+  }
+
+  function deleteAddress(id) {
+    const addr = addresses.find(a => a.id === id);
+    if (!addr) return;
+    if (confirm(`Delete address for "${addr.full_name}"?`)) {
+      addresses = addresses.filter(a => a.id !== id);
+      // If deleted was default, set first as default
+      if (addr.is_default && addresses.length > 0) {
+        addresses[0].is_default = true;
+      }
+      renderAddresses();
+      showToast('🗑️ Address deleted');
+    }
+  }
+
+  function setDefault(id) {
+    addresses.forEach(a => a.is_default = a.id === id);
+    renderAddresses();
+    showToast('⭐ Default address updated');
+  }
+
+  function editAddress(id) {
+    // In a real app, this would open a modal or form with pre-filled data
+    showToast('✏️ Edit address feature coming soon!');
+  }
+
+  function toggleAddressForm() {
+    const form = document.getElementById('addressForm');
+    form.classList.toggle('open');
+    if (!form.classList.contains('open')) {
+      document.getElementById('addressForm').querySelector('form').reset();
+    }
+  }
+
+  function showToast(message, type = 'success') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  function toggleLang() {
+    document.getElementById('langMenu').classList.toggle('active');
+  }
+
+  function setLang(lang) {
+    document.getElementById('langMenu').classList.remove('active');
+    document.querySelector('.lang-btn').innerHTML = `🌐 ${lang.toUpperCase()} ▼`;
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const btn = document.getElementById('themeBtn');
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  }
+
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAddresses();
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('themeBtn').textContent = '☀️';
+    }
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+    document.addEventListener('click', (event) => {
+      const langMenu = document.getElementById('langMenu');
+      if (langMenu && !event.target.closest('.lang-dropdown')) {
+        langMenu.classList.remove('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>

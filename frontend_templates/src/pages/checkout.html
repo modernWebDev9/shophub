@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - ShopHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       SHARED STYLES
+       ======================================== */
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --primary-light: #fdba74;
+      --secondary: #f59e0b;
+      --dark: #1f2937;
+      --light: #fff7ed;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --radius: 1rem;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 20px 40px rgba(249, 115, 22, 0.2);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f8fafc;
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ========================================
+       HEADER
+       ======================================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+      border-bottom: 3px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .header.scrolled { padding: 0.3rem 0; box-shadow: 0 4px 30px rgba(249, 115, 22, 0.25); }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .logo:hover { transform: scale(1.05); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after { width: 100%; }
+
+    .nav-link:hover { color: var(--primary); }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: rgba(249, 115, 22, 0.08);
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem;
+      border-radius: 50%;
+      transition: var(--transition);
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: rgba(249, 115, 22, 0.2);
+      transform: scale(1.1);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-dropdown { position: relative; }
+
+    .lang-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    .lang-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.5);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 150px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: var(--transition);
+      z-index: 100;
+      border: 1px solid var(--primary-light);
+    }
+
+    .lang-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      border: none;
+      background: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .lang-option:hover { background: rgba(249, 115, 22, 0.1); }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--dark);
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 1rem 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .mobile-menu.active {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      border-bottom: 1px solid #f3f4f6;
+      transition: var(--transition);
+    }
+
+    .mobile-menu a:hover {
+      color: var(--primary);
+      padding-left: 0.5rem;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-scaleIn { animation: scaleIn 0.5s ease-out; }
+    .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+      transform: translateY(-3px);
+    }
+
+    .btn-lg {
+      padding: 1rem 2.5rem;
+      font-size: 1.125rem;
+    }
+
+    .btn-block {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ========================================
+       CHECKOUT PAGE
+       ======================================== */
+    .checkout-page {
+      padding: 2rem 0;
+    }
+
+    .checkout-progress {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .checkout-progress::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: #e5e7eb;
+      z-index: 0;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .step.active .step-number {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
+    }
+
+    .step.completed .step-number {
+      background: var(--success);
+      color: white;
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray);
+    }
+
+    .step.active .step-label {
+      color: var(--primary);
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    /* ========================================
+       CHECKOUT FORM
+       ======================================== */
+    .checkout-form {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .checkout-form h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-light);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group label .required {
+      color: var(--danger);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: white;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .form-group input.error {
+      border-color: var(--danger);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group .helper-text {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    .form-group .error-text {
+      font-size: 0.8rem;
+      color: var(--danger);
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-group.error .error-text {
+      display: block;
+    }
+
+    /* Payment methods */
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .payment-method {
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: white;
+      font-weight: 500;
+    }
+
+    .payment-method:hover {
+      border-color: var(--primary-light);
+    }
+
+    .payment-method.active {
+      border-color: var(--primary);
+      background: rgba(249, 115, 22, 0.05);
+    }
+
+    .payment-method .icon {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Shipping methods */
+    .shipping-methods {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .shipping-method {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .shipping-method:hover {
+      border-color: var(--primary-light);
+    }
+
+    .shipping-method.active {
+      border-color: var(--primary);
+      background: rgba(249, 115, 22, 0.05);
+    }
+
+    .shipping-method .left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .shipping-method .radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .shipping-method.active .radio {
+      border-color: var(--primary);
+    }
+
+    .shipping-method.active .radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .shipping-method .name {
+      font-weight: 500;
+    }
+
+    .shipping-method .delivery {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .shipping-method .price {
+      font-weight: 600;
+    }
+
+    /* ========================================
+       ORDER SUMMARY (Sidebar)
+       ======================================== */
+    .order-summary {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .order-summary h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-light);
+    }
+
+    .summary-items {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-item {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .summary-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      background: var(--gray-light);
+    }
+
+    .summary-item .info {
+      flex: 1;
+    }
+
+    .summary-item .info .name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .summary-item .info .variant {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .summary-item .info .qty {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .summary-item .price {
+      font-weight: 600;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-row.total {
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding-top: 1rem;
+      border-top: 2px solid var(--gray-light);
+    }
+
+    .summary-row.total .amount {
+      color: var(--primary);
+    }
+
+    /* ========================================
+       ORDER CONFIRMATION (Success State)
+       ======================================== */
+    .order-confirmation {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    .order-confirmation .icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+    }
+
+    .order-confirmation h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .order-confirmation .order-number {
+      font-size: 1.25rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .order-confirmation p {
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #9ca3af;
+      padding: 3rem 0 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer h4 {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+      padding: 0.25rem 0;
+    }
+
+    .footer a:hover { color: var(--primary); }
+
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1024px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+      }
+      .order-summary {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+
+      .checkout-progress {
+        gap: 1rem;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+        justify-content: flex-start;
+      }
+
+      .checkout-progress::before {
+        display: none;
+      }
+
+      .step {
+        flex-shrink: 0;
+      }
+
+      .checkout-form { padding: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .payment-methods {
+        grid-template-columns: 1fr;
+      }
+
+      .header-inner { padding: 0.75rem 0; }
+      .logo { font-size: 1.4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .checkout-form { padding: 1rem; }
+      .order-summary { padding: 1.5rem; }
+      .shipping-method {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">🛍️ ShopHub</a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="cart.html" class="nav-link">Cart</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-dropdown">
+          <button class="lang-btn" onclick="toggleLang()">🌐 EN ▼</button>
+          <div class="lang-menu" id="langMenu">
+            <button class="lang-option" onclick="setLang('en')">🇺🇸 English</button>
+            <button class="lang-option" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
+            <button class="lang-option" onclick="setLang('es')">🇪🇸 Español</button>
+            <button class="lang-option" onclick="setLang('ar')">🇸🇦 العربية</button>
+          </div>
+        </div>
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <a href="cart.html" class="icon-btn">
+          🛒
+          <span class="cart-badge">3</span>
+        </a>
+        <a href="login.html" class="icon-btn">👤</a>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== CHECKOUT PAGE ========== -->
+<section class="checkout-page">
+  <div class="container">
+    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">🧾 Checkout</h1>
+    <p style="color: var(--gray); margin-bottom: 2rem;">Complete your purchase with confidence.</p>
+
+    <!-- Checkout Progress -->
+    <div class="checkout-progress">
+      <div class="step active" id="step1">
+        <div class="step-number">1</div>
+        <span class="step-label">Shipping</span>
+      </div>
+      <div class="step" id="step2">
+        <div class="step-number">2</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="step" id="step3">
+        <div class="step-number">3</div>
+        <span class="step-label">Confirm</span>
+      </div>
+    </div>
+
+    <div class="checkout-layout">
+      <!-- Checkout Form -->
+      <div class="checkout-form animate-scaleIn" id="checkoutForm">
+        <!-- Step 1: Shipping -->
+        <div id="shippingStep">
+          <h2>📦 Shipping Address</h2>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name <span class="required">*</span></label>
+              <input type="text" placeholder="John" id="firstName" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name <span class="required">*</span></label>
+              <input type="text" placeholder="Doe" id="lastName" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address <span class="required">*</span></label>
+            <input type="email" placeholder="you@example.com" id="email" required>
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input type="tel" placeholder="+1 (555) 123-4567" id="phone" required>
+          </div>
+
+          <div class="form-group">
+            <label>Street Address <span class="required">*</span></label>
+            <input type="text" placeholder="123 Main Street" id="address" required>
+          </div>
+
+          <div class="form-group">
+            <label>Apartment, Suite, etc. (Optional)</label>
+            <input type="text" placeholder="Apt 4B" id="address2">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>City <span class="required">*</span></label>
+              <input type="text" placeholder="New York" id="city" required>
+            </div>
+            <div class="form-group">
+              <label>State / Province <span class="required">*</span></label>
+              <input type="text" placeholder="NY" id="state" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Postal Code <span class="required">*</span></label>
+              <input type="text" placeholder="10001" id="zip" required>
+            </div>
+            <div class="form-group">
+              <label>Country <span class="required">*</span></label>
+              <select id="country" required>
+                <option value="">Select Country</option>
+                <option value="US" selected>United States</option>
+                <option value="CA">Canada</option>
+                <option value="UK">United Kingdom</option>
+                <option value="IN">India</option>
+                <option value="AU">Australia</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block btn-lg" onclick="nextStep(2)">
+            Continue to Payment →
+          </button>
+        </div>
+
+        <!-- Step 2: Payment -->
+        <div id="paymentStep" style="display: none;">
+          <h2>💳 Payment Method</h2>
+
+          <div class="form-group">
+            <label>Select Payment Method <span class="required">*</span></label>
+            <div class="payment-methods">
+              <div class="payment-method active" onclick="selectPayment(this)">
+                <span class="icon">💳</span>
+                Credit Card
+              </div>
+              <div class="payment-method" onclick="selectPayment(this)">
+                <span class="icon">📱</span>
+                UPI / Digital Wallet
+              </div>
+              <div class="payment-method" onclick="selectPayment(this)">
+                <span class="icon">💵</span>
+                Cash on Delivery
+              </div>
+            </div>
+          </div>
+
+          <div id="cardDetails">
+            <div class="form-group">
+              <label>Card Number <span class="required">*</span></label>
+              <input type="text" placeholder="1234 5678 9012 3456" id="cardNumber">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry Date <span class="required">*</span></label>
+                <input type="text" placeholder="MM/YY" id="expiry">
+              </div>
+              <div class="form-group">
+                <label>CVV <span class="required">*</span></label>
+                <input type="text" placeholder="123" id="cvv">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Name on Card <span class="required">*</span></label>
+              <input type="text" placeholder="John Doe" id="cardName">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+            <button class="btn btn-primary btn-block" onclick="nextStep(3)">Review Order →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div id="confirmStep" style="display: none;">
+          <h2>✅ Review Your Order</h2>
+
+          <div style="background: var(--gray-light); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem;">📦 Shipping Address</h4>
+            <p id="confirmAddress" style="color: var(--gray);"></p>
+          </div>
+
+          <div style="background: var(--gray-light); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem;">💳 Payment Method</h4>
+            <p id="confirmPayment" style="color: var(--gray);">Credit Card</p>
+          </div>
+
+          <div style="background: var(--gray-light); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem;">📦 Shipping Method</h4>
+            <div id="confirmShipping" style="color: var(--gray);">Standard Shipping (3-5 days)</div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+            <button class="btn btn-success btn-block btn-lg" onclick="placeOrder()">
+              ✅ Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Sidebar -->
+      <div class="order-summary">
+        <h3>🛒 Order Summary</h3>
+
+        <div class="summary-items" id="summaryItems">
+          <!-- Items loaded by JavaScript -->
+        </div>
+
+        <div id="summaryTotals">
+          <!-- Totals loaded by JavaScript -->
+        </div>
+
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+          <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem;">📝 Order Notes (Optional)</label>
+            <textarea placeholder="Special delivery instructions..." style="width: 100%; padding: 0.5rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.9rem; resize: vertical; min-height: 60px;"></textarea>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+          <div style="text-align: center; font-size: 0.7rem; color: var(--gray);">
+            <div style="font-size: 1.5rem;">🔒</div>
+            Secure Checkout
+          </div>
+          <div style="text-align: center; font-size: 0.7rem; color: var(--gray);">
+            <div style="font-size: 1.5rem;">🚚</div>
+            Free Shipping
+          </div>
+          <div style="text-align: center; font-size: 0.7rem; color: var(--gray);">
+            <div style="font-size: 1.5rem;">🔄</div>
+            Easy Returns
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Confirmation -->
+    <div class="order-confirmation" id="orderConfirmation">
+      <div class="icon">🎉</div>
+      <h2>Order Confirmed!</h2>
+      <div class="order-number">Order #ORD-20241215-12345</div>
+      <p>Thank you for your purchase. We'll send you a confirmation email shortly.</p>
+      <p style="margin-top: 0.5rem;">You can track your order from your account.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+        <a href="index.html" class="btn btn-primary">Continue Shopping →</a>
+        <a href="account-orders.html" class="btn btn-secondary">View Orders</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h4 style="font-size: 1.5rem;">🛍️ ShopHub</h4><p style="margin-top: 0.5rem;">Your one-stop destination for amazing products.</p></div>
+      <div><h4>Quick Links</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+      <div><h4>Support</h4><a href="#">FAQ</a><a href="#">Shipping Info</a><a href="#">Returns</a></div>
+      <div><h4>Follow Us</h4><a href="#">📘 Facebook</a><a href="#">📷 Instagram</a><a href="#">🐦 Twitter</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 ShopHub. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+  // ========================================
+  // CHECKOUT DATA
+  // ========================================
+  let currentStep = 1;
+
+  const cartItems = [
+    { id: 1, name: 'Wireless Headphones', price: 79.99, quantity: 2, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100', variant: 'Black' },
+    { id: 2, name: 'Smart Watch', price: 199.99, quantity: 1, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100', variant: 'Space Gray' },
+  ];
+
+  let selectedPayment = 'Credit Card';
+  let selectedShipping = 'Standard Shipping';
+
+  // ========================================
+  // RENDER FUNCTIONS
+  // ========================================
+  function renderSummary() {
+    const container = document.getElementById('summaryItems');
+    container.innerHTML = cartItems.map(item => `
+      <div class="summary-item">
+        <img src="${item.image}" alt="${item.name}">
+        <div class="info">
+          <div class="name">${item.name}</div>
+          <div class="variant">${item.variant}</div>
+          <div class="qty">Qty: ${item.quantity}</div>
+        </div>
+        <div class="price">$${(item.price * item.quantity).toFixed(2)}</div>
+      </div>
+    `).join('');
+
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = subtotal > 50 ? 0 : 10;
+    const total = subtotal + shipping;
+
+    document.getElementById('summaryTotals').innerHTML = `
+      <div class="summary-row">
+        <span>Subtotal (${cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
+        <span>$${subtotal.toFixed(2)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>${shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span class="amount">$${total.toFixed(2)}</span>
+      </div>
+    `;
+  }
+
+  // ========================================
+  // STEP NAVIGATION
+  // ========================================
+  function showStep(step) {
+    document.getElementById('shippingStep').style.display = step === 1 ? 'block' : 'none';
+    document.getElementById('paymentStep').style.display = step === 2 ? 'block' : 'none';
+    document.getElementById('confirmStep').style.display = step === 3 ? 'block' : 'none';
+
+    // Update progress
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active', 'completed'));
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById(`step${i}`);
+      if (i < step) el.classList.add('completed');
+      if (i === step) el.classList.add('active');
+    }
+
+    currentStep = step;
+    document.getElementById('checkoutForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function nextStep(step) {
+    // Validate shipping step
+    if (step === 2 && currentStep === 1) {
+      const required = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zip'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.classList.add('error');
+          valid = false;
+        } else {
+          el.classList.remove('error');
+        }
+      });
+      if (!valid) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      // Update confirmation address
+      document.getElementById('confirmAddress').textContent = 
+        `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}, ${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value} ${document.getElementById('zip').value}`;
+    }
+
+    if (step === 3 && currentStep === 2) {
+      document.getElementById('confirmPayment').textContent = selectedPayment;
+      document.getElementById('confirmShipping').textContent = selectedShipping;
+    }
+
+    showStep(step);
+  }
+
+  function prevStep(step) {
+    showStep(step);
+  }
+
+  // ========================================
+  // PAYMENT METHODS
+  // ========================================
+  function selectPayment(el) {
+    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+    el.classList.add('active');
+    selectedPayment = el.textContent.trim();
+
+    // Show/hide card details
+    document.getElementById('cardDetails').style.display = 
+      selectedPayment === 'Credit Card' ? 'block' : 'none';
+  }
+
+  // ========================================
+  // SHIPPING METHODS (simplified)
+  // ========================================
+  // In the shipping methods, we'll use the active class
+  document.querySelectorAll('.shipping-method').forEach(el => {
+    el.addEventListener('click', function() {
+      document.querySelectorAll('.shipping-method').forEach(m => m.classList.remove('active'));
+      this.classList.add('active');
+      selectedShipping = this.querySelector('.name').textContent;
+    });
+  });
+
+  // ========================================
+  // PLACE ORDER
+  // ========================================
+  function placeOrder() {
+    // Simulate order processing
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = '⏳ Processing...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('orderConfirmation').style.display = 'block';
+      document.getElementById('orderConfirmation').scrollIntoView({ behavior: 'smooth' });
+      // Update cart badge to 0
+      document.querySelector('.cart-badge').textContent = '0';
+    }, 1500);
+  }
+
+  // ========================================
+  // HEADER FUNCTIONS
+  // ========================================
+  function toggleLang() {
+    document.getElementById('langMenu').classList.toggle('active');
+  }
+
+  function setLang(lang) {
+    document.getElementById('langMenu').classList.remove('active');
+    document.querySelector('.lang-btn').innerHTML = `🌐 ${lang.toUpperCase()} ▼`;
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const btn = document.getElementById('themeBtn');
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  }
+
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('active');
+  }
+
+  // ========================================
+  // SHIPPING METHOD SELECTION
+  // ========================================
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize shipping methods
+    document.querySelectorAll('.shipping-method').forEach(el => {
+      el.addEventListener('click', function() {
+        document.querySelectorAll('.shipping-method').forEach(m => m.classList.remove('active'));
+        this.classList.add('active');
+        selectedShipping = this.querySelector('.name').textContent;
+      });
+    });
+
+    // Initialize payment methods
+    document.querySelectorAll('.payment-method').forEach(el => {
+      el.addEventListener('click', function() {
+        selectPayment(this);
+      });
+    });
+
+    // Render summary
+    renderSummary();
+
+    // Load theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('themeBtn').textContent = '☀️';
+    }
+
+    // Sticky header
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Close language menu on outside click
+    document.addEventListener('click', (event) => {
+      const langMenu = document.getElementById('langMenu');
+      if (langMenu && !event.target.closest('.lang-dropdown')) {
+        langMenu.classList.remove('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
